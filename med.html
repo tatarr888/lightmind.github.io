@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #edf2f8 0%, #d7e3f4 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Home Screen Styles */
+        .container {
+            max-width: 400px;
+            margin: 0 auto 80px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .section {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #2d3436;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .clickable-card {
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .clickable-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .icon-container {
+            width: 50px;
+            height: 50px;
+            margin: 10px auto 5px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .label {
+            font-size: 12px;
+            margin: 5px 0 10px;
+        }
+
+        /* Breathing Screen Styles */
+        #breathing-container {
+            background-color: #ffffff;
+            width: 320px;
+            height: 520px;
+            border-radius: 20px;
+            margin: 0 auto;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        #breathing-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: #80deea;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #004d40;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 4s ease-in-out;
+            margin: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #breathing-type {
+            padding: 12px;
+            margin: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            width: 80%;
+            font-size: 14px;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background-color: #80deea;
+            opacity: 0.5;
+            animation: float 5s ease-in infinite;
+        }
+
+        .bubble:nth-child(1) { width: 20px; height: 20px; left: 60px; top: 100px; }
+        .bubble:nth-child(2) { width: 25px; height: 25px; left: 240px; top: 150px; animation-delay: 1s; }
+        .bubble:nth-child(3) { width: 15px; height: 15px; left: 100px; top: 300px; animation-delay: 2s; }
+
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.5; }
+            100% { transform: translateY(-200px); opacity: 0; }
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background: white;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+        }
+
+        .nav-item {
+            font-size: 24px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: #eef1fd;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            color: #7c4dff;
+            background: #eef1fd;
+        }
+    </style>
+</head>
+<body>
+    <!-- Home Screen -->
+    <div id="homeScreen" class="screen active">
+        <div class="container">
+            <div class="section">
+                <div class="section-title">How are you feeling?</div>
+                <div class="grid">
+                    <div class="clickable-card" onclick="selectFeeling(this, 'happy')">
+                        <div class="icon-container">😊</div>
+                        <div class="label">Happy</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectFeeling(this, 'sad')">
+                        <div class="icon-container">😢</div>
+                        <div class="label">Sad</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectFeeling(this, 'angry')">
+                        <div class="icon-container">😠</div>
+                        <div class="label">Angry</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectFeeling(this, 'tired')">
+                        <div class="icon-container">😴</div>
+                        <div class="label">Tired</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectFeeling(this, 'stress')">
+                        <div class="icon-container">😰</div>
+                        <div class="label">Stress</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectFeeling(this, 'sick')">
+                        <div class="icon-container">😷</div>
+                        <div class="label">Sick</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">What are you going to do?</div>
+                <div class="grid">
+                    <div class="clickable-card" onclick="selectActivity(this, 'sleep')">
+                        <div class="icon-container">💤</div>
+                        <div class="label">Sleep</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectActivity(this, 'work')">
+                        <div class="icon-container">📚</div>
+                        <div class="label">Work/Study</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectActivity(this, 'meditation')">
+                        <div class="icon-container">🧘</div>
+                        <div class="label">Meditation</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectActivity(this, 'relaxation')">
+                        <div class="icon-container">🌿</div>
+                        <div class="label">Relaxation</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectActivity(this, 'ready')">
+                        <div class="icon-container">⏰</div>
+                        <div class="label">Get Ready</div>
+                    </div>
+                    <div class="clickable-card" onclick="selectActivity(this, 'social')">
+                        <div class="icon-container">👥</div>
+                        <div class="label">Social</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Breathing Screen -->
+    <div id="breathingScreen" class="screen">
+        <div id="breathing-container">
+            <div style="font-size: 24px; font-weight: bold; margin-bottom: 20px;">
+                AQUABREATHE
+            </div>
+            
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+            <div class="bubble"></div>
+
+            <select id="breathing-type">
+                <option value="4-4">Calm Breathing (4s Inhale, 4s Exhale)</option>
+                <option value="4-6">Relaxing (4s Inhale, 6s Exhale)</option>
+                <option value="6-4">Energizing (6s Inhale, 4s Exhale)</option>
+            </select>
+
+            <div id="breathing-circle">INHALE</div>
+            <div id="cycle-count" style="margin: 15px 0; color: #004d40;">8 cycles left</div>
+            <div id="start-prompt" style="color: #004d40;">Tap circle to start</div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="nav-item active" onclick="switchScreen('home', this)">🏠</div>
+        <div class="nav-item" onclick="switchScreen('breathing', this)">🧘</div>
+        <div class="nav-item">📊</div>
+        <div class="nav-item">⚙️</div>
+    </div>
+
+    <script>
+        let selectedFeeling = null;
+        let selectedActivity = null;
+
+        function switchScreen(screenName, navItem) {
+            // Update screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenName + 'Screen').classList.add('active');
+
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            navItem.classList.add('active');
+
+            // Handle breathing container
+            const breathingContainer = document.getElementById('breathing-container');
+            if (screenName === 'breathing') {
+                breathingContainer.style.display = 'flex';
+                initBreathingExercise();
+            } else {
+                breathingContainer.style.display = 'none';
+            }
+        }
+
+        function selectFeeling(element, feeling) {
+            document.querySelectorAll('.section:first-child .clickable-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedFeeling = feeling;
+        }
+
+        function selectActivity(element, activity) {
+            document.querySelectorAll('.section:nth-child(2) .clickable-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedActivity = activity;
+        }
+
+        function initBreathingExercise() {
+            let cyclesLeft = 8;
+            let isBreathing = false;
+
+            const breathingPatterns = {
+                "4-4": { inhale: 4000, exhale: 4000 },
+                "4-6": { inhale: 4000, exhale: 6000 },
+                "6-4": { inhale: 6000, exhale: 4000 }
+            };
+
+            function startBreathing() {
+                if (isBreathing) return;
+                isBreathing = true;
+
+                const breathingCircle = document.getElementById('breathing-circle');
+                const cycleCount = document.getElementById('cycle-count');
+                const startPrompt = document.getElementById('start-prompt');
+                const selectedPattern = document.getElementById('breathing-type').value;
+                const { inhale, exhale } = breathingPatterns[selectedPattern];
+
+                startPrompt.style.display = "none";
+
+                function animateBreathing() {
+                    if (cyclesLeft === 0) {
+                        isBreathing = false;
+                        cyclesLeft = 8;
+                        cycleCount.innerText = `${cyclesLeft} cycles left`;
+                        startPrompt.style.display = "block";
+                        breathingCircle.innerText = "INHALE";
+                        breathingCircle.style.transform = "scale(1)";
+                        return;
+                    }
+
+                    breathingCircle.innerText = "INHALE";
+                    breathingCircle.style.transform = "scale(1.2)";
+                    setTimeout(() => {
+                        breathingCircle.innerText = "EXHALE";
+                        breathingCircle.style.transform = "scale(1)";
+                        cyclesLeft--;
+                        cycleCount.innerText = `${cyclesLeft} cycles left`;
+                        setTimeout(animateBreathing, exhale);
+                    }, inhale);
+                }
+
+                animateBreathing();
+            }
+
+            const circle = document.getElementById('breathing-circle');
+            circle.addEventListener('click', startBreathing);
+        }
+    </script>
+</body>
+</html>
