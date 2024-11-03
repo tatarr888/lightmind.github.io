@@ -267,26 +267,29 @@
         }
 
         .yellow {
-            background-color: #ffcc00;
+            background-color: #ffcc00 !important;
         }
         
         .green {
-            background-color: greenyellow;
+            background-color: greenyellow !important;
         }
-        .lightblue {
-            background-color: rgb(200, 232, 255);
+        .lightyblue {
+            background-color: rgb(200, 232, 255) !important;
         }
         .pastelblue {
-            background-color: rgb(137, 220, 255);
+            background-color: rgb(137, 220, 255) !important;
         }
         .softblue {
-            background-color: rgb(160, 222, 255);
+            background-color: rgb(160, 222, 255)!important;
         }
         .softpink {
-            background-color: rgb(253, 213, 255);
+            background-color: rgb(253, 213, 255) !important;
         }
         .lightgreen {
-            background-color: rgb(190, 255, 197);
+            background-color: rgb(190, 255, 197)!important;
+        }
+        .grey {
+            background-color: #a0a4b0;
         }
     </style>
 </head>
@@ -331,9 +334,9 @@
             </div>
             <div class="device-item">
                 <div class="device-info">
-                    <div class="device-name">AIR CONDITION
+                    <div class="device-name">CURTAIN
 
-                    SMART LIGHTS</div>
+                    </div>
                     <div class="device-detail">Philips Hue | 80%</div>
                 </div>
                 <div class="toggle-switch active"></div>
@@ -377,14 +380,28 @@
         const mood = localStorage.getItem('mood');
         console.log(mood);
         let element = document.getElementById("light-color");
+        // element.removeAttribsute("class");
+        element.classList.remove("yellow");
+        element.classList.remove("green");
+        element.classList.remove("lightyblue");
+        element.classList.remove("pastelblue");
+        element.classList.remove("softpink");
+
+        element.classList.remove("lightgreen");
+        element.classList.remove("grey");
+
+
+
 
         if (mood === "sad") {
+            // element.removeAttribute("class");
             element.classList.add("yellow");
         } 
         if (mood === "stress") {
             element.classList.add("green");
         } 
         if (mood === "happy") {
+            // element.removeAttribute("class");
             element.classList.add("lightyblue");
         } 
         if (mood === "angry") {
@@ -397,7 +414,7 @@
             element.classList.add("lightgreen");
         }
          else {
-            element.classList.add("yellow");
+            element.classList.add("grey");
         }
 
 

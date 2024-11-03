@@ -392,6 +392,7 @@
         
 
         function selectFeeling(element, feeling) {
+            console.log(feeling)
             localStorage.setItem('mood', feeling);
             const mood = localStorage.getItem('mood');
             console.log(mood);  
