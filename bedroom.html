@@ -265,7 +265,29 @@
             margin-left: 8px; /* Space between the name and the color sample */
             color: #FFF8DC;
         }
+
+        .yellow {
+            background-color: #ffcc00;
+        }
         
+        .green {
+            background-color: greenyellow;
+        }
+        .lightblue {
+            background-color: rgb(200, 232, 255);
+        }
+        .pastelblue {
+            background-color: rgb(137, 220, 255);
+        }
+        .softblue {
+            background-color: rgb(160, 222, 255);
+        }
+        .softpink {
+            background-color: rgb(253, 213, 255);
+        }
+        .lightgreen {
+            background-color: rgb(190, 255, 197);
+        }
     </style>
 </head>
 <body>
@@ -301,7 +323,7 @@
                 <div class="device-info">
                     <div class="device-name">
                     SMART LIGHTS
-                        <span class="color-sample" style="background-color: #ffcc00;"></span> <!-- Hex color sample -->
+                        <span class="color-sample" id="light-color"></span> <!-- Hex color sample -->
                     </div>
                     <div class="device-detail">Philips Hue | 80%</div>
                 </div>
@@ -351,6 +373,34 @@
     </div>
 
     <script>
+
+        const mood = localStorage.getItem('mood');
+        console.log(mood);
+        let element = document.getElementById("light-color");
+
+        if (mood === "sad") {
+            element.classList.add("yellow");
+        } 
+        if (mood === "stress") {
+            element.classList.add("green");
+        } 
+        if (mood === "happy") {
+            element.classList.add("lightyblue");
+        } 
+        if (mood === "angry") {
+            element.classList.add("pastelblue");
+        } 
+        if (mood === "worry") {
+            element.classList.add("softpink");
+        } 
+        if (mood === "sick") {
+            element.classList.add("lightgreen");
+        }
+         else {
+            element.classList.add("yellow");
+        }
+
+
         // Toggle switches
         document.querySelectorAll('.toggle-switch').forEach(toggle => {
             toggle.addEventListener('click', function() {

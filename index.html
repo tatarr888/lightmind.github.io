@@ -294,19 +294,19 @@
                 </div>
                 <div class="clickable-card" onclick="selectFeeling(this, 'angry')">
                     <div class="icon-container">😠</div>
-                    <div class="label">Angry</div>
+                    <div class="label"><a href="./allroom.html" > Angry </a></div>
                 </div>
                 <div class="clickable-card" onclick="selectFeeling(this, 'tired')">
                     <div class="icon-container">😴</div>
-                    <div class="label">Tired</div>
+                    <div class="label"><a href="./allroom.html" > Tired </a></div>
                 </div>
                 <div class="clickable-card" onclick="selectFeeling(this, 'stress')">
                     <div class="icon-container">😰</div>
-                    <div class="label">Stress</div>
+                    <div class="label"><a href="./allroom.html" > Stress </a></div>
                 </div>
                 <div class="clickable-card" onclick="selectFeeling(this, 'worry')">
                     <div class="icon-container">😟</div>
-                    <div class="label">Sick</div>
+                    <div class="label"><a href="./allroom.html" > Sick </a></div>
                 </div>
             </div>
         </div>
@@ -389,7 +389,13 @@
         let selectedFeeling = null;
         let selectedActivity = null;
 
+        
+
         function selectFeeling(element, feeling) {
+            localStorage.setItem('mood', feeling);
+            const mood = localStorage.getItem('mood');
+            console.log(mood);  
+
             document.querySelectorAll('.section:first-child .clickable-card').forEach(card => {
                 card.classList.remove('selected');
             });
