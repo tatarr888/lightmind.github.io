@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Room Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #edf2f8 0%, #d7e3f4 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 80px;
+            background-color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(to right, #7c4dff, #9254de);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .room-status {
+            padding: 30px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .status-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 15px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4b6fdf;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .power-btn {
+            background: linear-gradient(to right, #f04f47, #ff6b6b);
+            color: white;
+            padding: 15px;
+            width: 90%;
+            margin: 20px auto;
+            text-align: center;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(240, 79, 71, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .power-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(240, 79, 71, 0.3);
+        }
+
+        .device-list {
+            padding: 20px;
+        }
+
+        .device-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .device-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .device-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .device-name {
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 4px;
+        }
+
+        .device-detail {
+            font-size: 12px;
+            color: #a0a4b0;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 28px;
+            background-color: #dfe6e9;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch::before {
+            content: "";
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active {
+            background-color: #4b6fdf;
+        }
+
+        .toggle-switch.active::before {
+            left: 24px;
+        }
+
+        .room-details {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            margin: 20px;
+        }
+
+        .details-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+
+        .connected-devices {
+            margin-top: 15px;
+        }
+
+        .device-list-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2d3436;
+        }
+
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .device-chip {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #4b6fdf;
+            text-align: center;
+        }
+
+        .last-activity {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #a0a4b0;
+            text-align: right;
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background-color: white;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+        }
+
+        .navbar-item {
+            font-size: 24px;
+            color: #a0a4b0;
+            cursor: pointer;
+            padding: 10px 20px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-item:hover {
+            background: #eef1fd;
+            transform: translateY(-2px);
+        }
+
+        .navbar-item.active {
+            color: #4b6fdf;
+            background: #eef1fd;
+        }
+        
+        .color-sample {
+            display: inline-block;
+            width: 17px; /* Adjust size as needed */
+            height: 17px; /* Adjust size as needed */
+            border-radius: 3px; /* Optional: makes it slightly rounded */
+            margin-left: 8px; /* Space between the name and the color sample */
+            color: 
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="back-btn">←</span>
+            BEDROOM
+        </div>
+
+        <div class="room-status">
+            <div class="status-icon">🛏️</div>
+            <div class="status-text">Mood: Sad | Activity: -</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-value">75%</div>
+                <div class="stat-label">Comfort Level</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value">21°C</div>
+                <div class="stat-label">Temperature</div>
+            </div>
+        </div>
+
+        <div class="power-btn">TURN OFF ALL DEVICES</div>
+
+        <div class="device-list">
+            <div class="device-item">
+                <div class="device-info">
+                    <div class="device-name">
+                    SMART LIGHTS
+                        <span class="color-sample" style="background-color: #ffcc00;"></span> <!-- Hex color sample -->
+                    </div>
+                    <div class="device-detail">Philips Hue | 80%</div>
+                </div>
+                <div class="toggle-switch active"></div>
+            </div>
+            <div class="device-item">
+                <div class="device-info">
+                    <div class="device-name">AIR CONDITION
+
+                    SMART LIGHTS</div>
+                    <div class="device-detail">Philips Hue | 80%</div>
+                </div>
+                <div class="toggle-switch active"></div>
+            </div>
+            <div class="device-item">
+                <div class="device-info">
+                    <div class="device-name">AIR CONDITION</div>
+                    <div class="device-detail">Auto Mode | Air Quality: Good</div>
+                </div>
+                <div class="toggle-switch active"></div>
+            </div>
+            <div class="device-item">
+                <div class="device-info">
+                    <div class="device-name">SOUND MACHINE</div>
+                    <div class="device-detail">White Noise | Timer: 60min</div>
+                </div>
+                <div class="toggle-switch"></div>
+            </div>
+        </div>
+
+        <div class="room-details">
+            <div class="device-list-title">Connected Devices</div>
+            <div class="devices-grid">
+                <div class="device-chip">Smart Lights</div>
+                <div class="device-chip">Air Codition</div>
+                <div class="device-chip">Sound Machine</div>
+                <div class="device-chip">Temperature Control</div>
+            </div>
+            <div class="last-activity">Last Activity: 2 hours ago</div>
+        </div>
+    </div>
+    <div class="navbar">
+        <div class="nav-item active">🏠</div>
+        <div class="nav-item">🧘</div>
+        <div class="nav-item">📊</div>
+        <div class="nav-item">⚙️</div>
+    </div>
+
+    <script>
+        // Toggle switches
+        document.querySelectorAll('.toggle-switch').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+
+        // Power button
+        document.querySelector('.power-btn').addEventListener('click', function() {
+            const toggles = document.querySelectorAll('.toggle-switch');
+            const isAnyActive = Array.from(toggles).some(t => t.classList.contains('active'));
+            
+            toggles.forEach(toggle => {
+                toggle.classList.toggle('active', !isAnyActive);
+            });
+            
+            this.textContent = isAnyActive ? 'TURN ON ALL DEVICES' : 'TURN OFF ALL DEVICES';
+            this.style.background = isAnyActive ? 
+                'linear-gradient(to right, #4b6fdf, #6382e6)' : 
+                'linear-gradient(to right, #f04f47, #ff6b6b)';
+        });
+
+        // Navigation
+        document.querySelectorAll('.navbar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.navbar-item').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+        

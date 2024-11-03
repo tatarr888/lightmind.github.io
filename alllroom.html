@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Rooms</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #edf2f8;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .header {
+      background-color: #7c4dff;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 15px;
+    }
+    .room {
+      background-color: #f4f5f7;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      color: #a0a4b0;
+      font-size: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      cursor: pointer;
+    }
+    .room.active {
+      background-color: #e0e3e7; /* Change active color if needed */
+      color: #4b6fdf;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    .room img {
+      max-width: 40px;
+      margin-bottom: 10px;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      background-color: #fff;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .nav-item {
+      font-size: 24px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .navbar-item.active {
+      color: #4b6fdf;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div id="allroom" class="header">ALL ROOMS</div>
+    
+    <div class="grid">
+      <div class="room" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/bath.png" alt="Bathroom Icon">
+        Bathroom
+      </div>
+      <div class="room" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/washing-machine.png" alt="Washing Room Icon">
+        Washing Room
+      </div>
+      <div class="room" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/book-shelf.png" alt="Library Icon">
+        Library
+      </div>
+      <div class="room active" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/sofa.png" alt="Living Room Icon">
+        Living Room
+      </div>
+      <div class="room" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/kitchen.png" alt="Kitchen Icon">
+        Kitchen
+      </div>
+      <div class="room" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/bed.png" alt="Bedroom Icon">
+        <a href="./bedroom.html">Bedroom</a>
+      </div>
+      <div class="room" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/dining-room.png" alt="Dining Room Icon">
+        Dining Room
+      </div>
+      <div class="room" onclick="selectRoom(this)">
+        <img src="https://img.icons8.com/ios/50/000000/garage.png" alt="Garage Icon">
+        Garage
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Bar -->
+<div class="navbar">
+    <div class="nav-item active" onclick="switchScreen('home', this)">🏠</div>
+    <div class="nav-item" onclick="switchScreen('breathing', this)">🧘</div>
+    <div class="nav-item">📊</div>
+    <div class="nav-item">⚙️</div>
+</div>
+
+  <script>
+    function selectRoom(element) {
+      // Remove active class from all rooms
+      const rooms = document.querySelectorAll('.room');
+      rooms.forEach(room => room.classList.remove('active'));
+
+      // Add active class to the clicked room
+      element.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

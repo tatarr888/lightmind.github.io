@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Wellness Home</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #edf2f8 0%, #d7e3f4 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto 80px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(to right, #7c4dff, #9254de);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .section {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: #2d3436;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .clickable-card {
+            background: white;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .clickable-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .clickable-card.selected {
+            background: #eef1fd;
+        }
+
+        .clickable-card.selected::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid #7c4dff;
+            border-radius: 15px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(124, 77, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(124, 77, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(124, 77, 255, 0); }
+        }
+
+        .icon-container {
+            width: 50px;
+            height: 50px;
+            margin: 10px auto 5px;
+            background: #f8f9fa;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .clickable-card:hover .icon-container {
+            transform: scale(1.1);
+            background: #eef1fd;
+        }
+
+        .clickable-card.selected .icon-container {
+            background: #7c4dff;
+            transform: scale(1.1);
+        }
+
+        .label {
+            font-size: 12px;
+            color: #2d3436;
+            font-weight: 500;
+            margin: 5px 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .clickable-card.selected .label {
+            color: #7c4dff;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e0e0e0, transparent);
+            margin: 0;
+        }
+
+        .question-box {
+            display: none;
+            padding: 20px;
+            text-align: center;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 10px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-yes {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-no {
+            background: #f5f6fa;
+            color: #2d3436;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background: white;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+        }
+
+        .nav-item {
+            font-size: 24px;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background: #eef1fd;
+            transform: translateY(-2px);
+        }
+
+        .nav-item.active {
+            color: #7c4dff;
+            background: #eef1fd;
+        }
+
+        .support-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            animation: modalSlideUp 0.3s ease;
+        }
+        
+        .question-container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .question-text {
+            margin-bottom: 15px;
+            color: #2d3436;
+            font-size: 16px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .yn-button {
+            padding: 10px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .yes-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .no-btn {
+            background: #f5f6fa;
+            color: #2d3436;
+        }
+
+        .yn-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes modalSlideUp {
+            from { transform: translate(-50%, -40%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Feelings Section -->
+        <div class="section">
+            <div class="section-title">How are you feeling?</div>
+            <div class="grid">
+                <div class="clickable-card" onclick="selectFeeling(this, 'happy')">
+                    <div class="icon-container">😊</div>
+                    <div class="label">Happy</div>
+                </div>
+                <div class="clickable-card" onclick="selectFeeling(this, 'sad')">
+                    <div class="icon-container">😢</div>
+                    <div class="label"><a href="./alllroom.html" > Sad </a></div>
+                </div>
+                <div class="clickable-card" onclick="selectFeeling(this, 'angry')">
+                    <div class="icon-container">😠</div>
+                    <div class="label">Angry</div>
+                </div>
+                <div class="clickable-card" onclick="selectFeeling(this, 'tired')">
+                    <div class="icon-container">😴</div>
+                    <div class="label">Tired</div>
+                </div>
+                <div class="clickable-card" onclick="selectFeeling(this, 'stress')">
+                    <div class="icon-container">😰</div>
+                    <div class="label">Stress</div>
+                </div>
+                <div class="clickable-card" onclick="selectFeeling(this, 'worry')">
+                    <div class="icon-container">😟</div>
+                    <div class="label">Sick</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Activities Section -->
+        <div class="section">
+        <div class="section-title">What you going to do?</div>
+            <div class="grid">
+                <div class="clickable-card" onclick="selectActivity(this, 'sleep')">
+                    <div class="icon-container">💤</div>
+                    <div class="label">Sleep</div>
+                </div>
+                <div class="clickable-card" onclick="selectActivity(this, 'work')">
+                    <div class="icon-container">📚</div>
+                    <div class="label">Work/Study</div>
+                </div>
+                <div class="clickable-card" onclick="selectActivity(this, 'meditation')">
+                    <div class="icon-container">🧘</div>
+                    <div class="label">Meditation</div>
+                </div>
+                <div class="clickable-card" onclick="selectActivity(this, 'relaxation')">
+                    <div class="icon-container">🌿</div>
+                    <div class="label">Relaxation</div>
+                </div>
+                <div class="clickable-card" onclick="selectActivity(this, 'ready')">
+                    <div class="icon-container">⏰</div>
+                    <div class="label">Get Ready</div>
+                </div>
+                <div class="clickable-card" onclick="selectActivity(this, 'social')">
+                    <div class="icon-container">👥</div>
+                    <div class="label">Social</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="questionContainer">
+            <div class="question-text">Would you like to share more about how you're feeling?</div>
+            
+            <div class="button-group">
+                <button class="yn-button yes-btn" onclick="handleResponse(true)">Yes</button>
+                <button class="yn-button no-btn" onclick="handleResponse(false)">No</button>
+            </div>
+        </div>
+    </div>
+
+        <!-- Question Box -->
+        <div class="question-box" id="questionBox">
+            <div style="margin-bottom: 15px;">Would you like to share more about how you're feeling?</div>
+            <div class="button-group">
+                <button class="btn btn-yes" onclick="handleAnswer(true)">Yes</button>
+                <button class="btn btn-no" onclick="handleAnswer(false)">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Modal -->
+    <div class="support-modal" id="supportModal">
+        <div class="modal-content">
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 15px;">Mental Health Support</div>
+            <div style="margin-bottom: 15px;">
+                I'm here to listen and support you. Would you like to tell me more about what's on your mind?
+            </div>
+            <input type="text" 
+                   style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px;"
+                   placeholder="Type your message here...">
+            <button class="btn btn-yes" style="width: 100%;">Send Message</button>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <div class="nav-item active">🏠</div>
+        <div class="nav-item">🧘</div>
+        <div class="nav-item">📊</div>
+        <div class="nav-item">⚙️</div>
+    </div>
+
+    <script>
+        let selectedFeeling = null;
+        let selectedActivity = null;
+
+        function selectFeeling(element, feeling) {
+            document.querySelectorAll('.section:first-child .clickable-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedFeeling = feeling;
+            checkSelections();
+        }
+
+        function selectActivity(element, activity) {
+            document.querySelectorAll('.section:nth-child(3) .clickable-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedActivity = activity;
+            checkSelections();
+        }
+
+        function checkSelections() {
+            const questionBox = document.getElementById('questionBox');
+            if (selectedFeeling && selectedActivity) {
+                questionBox.style.display = 'block';
+            } else {
+                questionBox.style.display = 'none';
+            }
+        }
+
+        function handleAnswer(isYes) {
+            const questionBox = document.getElementById('questionBox');
+            const supportModal = document.getElementById('supportModal');
+            
+            if (isYes) {
+                supportModal.style.display = 'block';
+            }
+            questionBox.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.className === 'support-modal') {
+                document.getElementById('supportModal').style.display = 'none';
+            }
+        }
+
+        // Initialize with question box and support modal hidden
+        document.getElementById('questionBox').style.display = 'none';
+        document.getElementById('supportModal').style.display = 'none';
+    </script>
+</body>
+</html>
